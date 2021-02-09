@@ -1,0 +1,35 @@
+version: '3'
+services:
+    nginx:
+        image: nginx:alpine
+        volumes:
+            - ./public/:/usr/src/app
+            - ./.docker/nginx/app.conf:/etc/nginx/conf.d/default.conf:ro
+        ports:
+            - 8888:80
+        depends_on:
+            - php
+    db:
+        image: mariadb
+        hostname: mariadb
+        ports:
+            - 3306:3306
+        environment:
+            TZ: "Europe/Paris"
+            MYSQL_ROOT_PASSWORD: root
+        restart: always
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+    php:
+        build:
+            context: .
+            dockerfile: .docker/php/Dockerfile
+        volumes:
+            - ./:/usr/src/app
+            - /usr/src/app/vendor
+        env_file:
+            - .env
+        user: 1000:1000
