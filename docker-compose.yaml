@@ -30,6 +30,7 @@ services:
         volumes:
             - ./:/usr/src/app
             - /usr/src/app/vendor
+            - /usr/src/app/var 
         env_file:
             - .env
         user: 1000:1000
